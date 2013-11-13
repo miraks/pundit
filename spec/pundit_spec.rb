@@ -217,13 +217,13 @@ describe Pundit do
     end
 
     it "can be given a different permission to check" do
-      controller.authorize(post, :show?).should be_true
-      expect { controller.authorize(post, :destroy?) }.to raise_error(Pundit::NotAuthorizedError)
+      controller.authorize(post, query: :show?).should be_true
+      expect { controller.authorize(post, query: :destroy?) }.to raise_error(Pundit::NotAuthorizedError)
     end
 
     it "works with anonymous class policies" do
-      controller.authorize(article_tag, :show?).should be_true
-      expect { controller.authorize(article_tag, :destroy?) }.to raise_error(Pundit::NotAuthorizedError)
+      controller.authorize(article_tag, query: :show?).should be_true
+      expect { controller.authorize(article_tag, query: :destroy?) }.to raise_error(Pundit::NotAuthorizedError)
     end
 
     it "raises an error when the permission check fails" do
