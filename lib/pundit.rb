@@ -56,7 +56,7 @@ module Pundit
     query ||= opts.fetch(:query) { params[:action].to_s + "?" }
     @_policy_authorized = true
     unless policy(record).public_send(query, *opts[:args])
-      raise NotAuthorizedError, error_message(record, query)
+      raise NotAuthorizedError, error_message(record, query, opts)
     end
     true
   end
@@ -67,8 +67,8 @@ module Pundit
   end
   attr_writer :policy_scope
 
-  def policy(record)
-    @policy or Pundit.policy!(pundit_user, record)
+  def policy(record, opts = {})
+    @policy or Pundit.policy!(pundit_user, opts[:class_name] || record)
   end
   attr_writer :policy
 
@@ -78,8 +78,8 @@ module Pundit
 
   private
 
-  def error_message(record, query)
-    record = record.class.to_s.parameterize
+  def error_message(record, query, opts = {})
+    record = (opts.has_key?(:class_name) ? opts[:class_name] : record.class).to_s.parameterize
     query = query.to_s.parameterize
     message = i18n_error_message(record, query)
     message ||= "You are not allowed to perform this action."
