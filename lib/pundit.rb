@@ -79,7 +79,7 @@ module Pundit
   private
 
   def error_message(record, query, opts = {})
-    record = (opts.has_key?(:class_name) ? opts[:class_name] : record.class).to_s.parameterize
+    record = (opts.has_key?(:class_name) ? opts[:class_name] : record.class).to_s.parameterize.underscore
     query = query.to_s.parameterize
     message = i18n_error_message(record, query)
     message ||= "You are not allowed to perform this action."
